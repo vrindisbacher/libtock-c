@@ -10,8 +10,7 @@ int main(void) {
   int i = 0;
   while (i < 100) {
     int increment = brk_array[i % 10];
-    memop_return_t ret = memop(1, 10);
-    uint8_t* heap_end  = (uint8_t*) ret.data;
+    memop_return_t ret = memop(1, increment);
     i += 1;
   }
 }
