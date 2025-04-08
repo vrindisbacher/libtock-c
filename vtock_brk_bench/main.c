@@ -10,7 +10,7 @@ int main(void) {
   int i = 0;
   while (i < 100) {
     int increment = brk_array[i % 10];
-    memop_return_t ret = memop(1, increment);
+    memop(1, increment);
     i += 1;
   }
 }
