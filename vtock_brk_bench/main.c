@@ -1,16 +1,26 @@
 /* vim: set sw=2 expandtab tw=80: */
 
 #include <stdio.h>
+#include <sys/types.h>
 #include <libtock/tock.h>
 #include<math.h>
 
-static int brk_array[10] = {42, 17, 99, 32, 88, 5, 64, 123, 76, 51};
-
 int main(void) {
-  int i = 0;
-  while (i < 100) {
-    int increment = brk_array[i % 10];
-    memop(1, increment);
-    i += 1;
+  memop_return_t ret = memop(1, 0);
+  if (ret.status != TOCK_STATUSCODE_SUCCESS) {
+    return 1;
   }
+  caddr_t original_heap_end = (caddr_t) ret.data;
+
+  int counter = 1;
+  while (true) {
+    // increment heap with brk 1
+    memop_return_t ret = memop(0, (int) original_heap_end);
+    if (ret.status != TOCK_STATUSCODE_SUCCESS) {
+      break;
+    }
+    original_heap_end += 1;
+    counter += 1;
+  }
+  printf("Failed after %d invocations of brk", counter);
 }
